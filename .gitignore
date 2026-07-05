@@ -12,6 +12,18 @@ dist
 dist-ssr
 *.local
 
+# Backend
+backend/.env
+backend/venv/
+backend/trips.db
+
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+.env
+venv/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
