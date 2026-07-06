@@ -33,12 +33,15 @@ def get_destinations():
 
 @app.post("/generate-trip")
 def generate_trip(request: TripRequest):
-    itinerary = generate_itinerary(
-        destination=request.destination,
-        days=request.days,
-        interests=request.interests,
-        budget=request.budget,
-    )
+    try:
+        itinerary = generate_itinerary(
+            destination=request.destination,
+            days=request.days,
+            interests=request.interests,
+            budget=request.budget,
+        )
+    except Exception:
+        raise HTTPException(status_code=500, detail="Failed to generate itinerary. Please try again.")
     return {"itinerary": itinerary}
 
 

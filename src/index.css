@@ -30,9 +30,50 @@
 .animate-fade-up {
   animation: fade-up 0.7s ease-out both;
 }
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-14px); }
+}
+.animate-float-slow { animation: float-slow 6s ease-in-out infinite; }
+
+@keyframes float-slower {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-22px); }
+}
+.animate-float-slower { animation: float-slower 9s ease-in-out infinite; }
+
+@keyframes aurora-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -20px) scale(1.15); }
+}
+.animate-aurora { animation: aurora-drift 14s ease-in-out infinite; }
+
+@keyframes particle-rise {
+  0% { transform: translateY(0); opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { transform: translateY(-140px); opacity: 0; }
+}
+.animate-particle { animation: particle-rise 7s linear infinite; }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-fade-up {
+  .animate-fade-up,
+  .animate-float-slow,
+  .animate-float-slower,
+  .animate-aurora,
+  .animate-particle {
     animation: none;
   }
 }
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow { animation: spin-slow 40s linear infinite; }
+
+@keyframes plane-fly {
+  0% { left: 0%; transform: translateY(0) rotate(90deg); }
+  50% { transform: translateY(-10px) rotate(90deg); }
+  100% { left: 100%; transform: translateY(0) rotate(90deg); }
+}
+.animate-plane-fly { animation: plane-fly 2.4s ease-in-out infinite; }

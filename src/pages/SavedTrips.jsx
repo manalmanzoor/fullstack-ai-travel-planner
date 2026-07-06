@@ -1,10 +1,19 @@
 import { useEffect, useState } from "react";
-import { MapPin, Calendar, Wallet, Sparkles, ChevronDown, Trash2 } from "lucide-react";
+import { MapPin, Trash2, ChevronDown } from "lucide-react";
 import { getSavedTrips, deleteTrip } from "../api/trips";
+import { TripMeta, ItineraryTimeline } from "../components/ItineraryDisplay";
 
 function TripCard({ trip, onDelete }) {
   const [expanded, setExpanded] = useState(false);
   const [deleting, setDeleting] = useState(false);
+
+  let parsedItinerary = null;
+  try {
+    const parsed = JSON.parse(trip.itinerary);
+    if (parsed && parsed.days) parsedItinerary = parsed;
+  } catch {
+    parsedItinerary = null;
+  }
 
   const handleDelete = async () => {
     const confirmed = window.confirm(`Remove your ${trip.destination} trip?`);
@@ -23,8 +32,8 @@ function TripCard({ trip, onDelete }) {
   return (
     <div className={`bg-white rounded-2xl shadow-sm overflow-hidden transition-opacity ${deleting ? "opacity-40" : ""}`}>
       <div className="h-1.5 bg-gradient-to-r from-primary to-secondary" />
-      <div className="p-6">
-        <div className="flex justify-between items-start mb-4">
+      <div className="p-8">
+        <div className="flex justify-between items-start mb-6">
           <div className="flex items-center gap-2">
             <MapPin size={18} className="text-primary" />
             <h2 className="text-xl font-semibold text-ink">{trip.destination}</h2>
@@ -44,33 +53,30 @@ function TripCard({ trip, onDelete }) {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2 mb-5">
-          <span className="flex items-center gap-1.5 text-xs bg-sage/40 text-primary px-3 py-1.5 rounded-full">
-            <Calendar size={13} /> {trip.days} days
-          </span>
-          <span className="flex items-center gap-1.5 text-xs bg-sage/40 text-primary px-3 py-1.5 rounded-full">
-            <Wallet size={13} /> {trip.budget} budget
-          </span>
-          <span className="flex items-center gap-1.5 text-xs bg-sage/40 text-primary px-3 py-1.5 rounded-full">
-            <Sparkles size={13} /> {trip.interests}
-          </span>
-        </div>
-
-        <p
-          className={`whitespace-pre-line text-ink/70 text-sm leading-relaxed ${
-            expanded ? "" : "line-clamp-4"
-          }`}
-        >
-          {trip.itinerary}
-        </p>
-
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="flex items-center gap-1 text-primary text-sm font-medium mt-3 hover:underline"
-        >
-          {expanded ? "Show less" : "Read full itinerary"}
-          <ChevronDown size={16} className={`transition-transform ${expanded ? "rotate-180" : ""}`} />
-        </button>
+        {parsedItinerary ? (
+          <>
+            <TripMeta
+              destination={trip.destination}
+              days={trip.days}
+              budget={trip.budget}
+              interests={trip.interests}
+            />
+            <ItineraryTimeline data={parsedItinerary} />
+          </>
+        ) : (
+          <>
+            <p className={`whitespace-pre-line text-ink/70 text-sm leading-relaxed ${expanded ? "" : "line-clamp-4"}`}>
+              {trip.itinerary}
+            </p>
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className="flex items-center gap-1 text-primary text-sm font-medium mt-3 hover:underline"
+            >
+              {expanded ? "Show less" : "Read full itinerary"}
+              <ChevronDown size={16} className={`transition-transform ${expanded ? "rotate-180" : ""}`} />
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
